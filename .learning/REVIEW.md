@@ -33,9 +33,10 @@
 
 ---
 
-## Upcoming (0)
+## Upcoming (1)
+- React Reconciliation + Rendering Model    K:4 P:0    due: +7d (2026-08-25)
 
-> Empty — no topics in queue yet.
+
 
 ---
 

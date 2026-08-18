@@ -8,23 +8,31 @@
 ## Current Session
 
 ```
-date: null
-week: null
-day: null
-status: null              ← active | completed | abandoned
-energy: null              ← high | medium | low | very low
-available: null
-actual: null
+date: 2026-08-18
+week: 1
+day: 2
+status: completed
+energy: low
+available: 2h
+actual: ~1h
 
-today_objective: null
+today_objective: Reconciliation + keys; start JobCard.tsx
 
-done: []
-in_progress: []
+done:
+  - Explained reconciliation: render phase (interruptible, diff-only) vs commit phase (synchronous DOM mutation) — correctly reasoned to visual tearing as the "why"
+  - Explained index-as-key failure mode: traced through a concrete 3-item list deletion scenario, correctly identified state gets reused/misapplied onto the wrong item because React matches fibers by key not by data identity
+  - Explained that useState is stored on the fiber node, not tied to "the component representing X"
+  - Created frontend/src/types/job.types.ts — Job type (id, company, position, status union, appliedDate)
+
+in_progress:
+  - JobCard.tsx not yet written — requirements given, waiting on implementation
+
 blocked: []
 
-in_progress_files: []
+in_progress_files:
+  - frontend/src/features/jobs/components/JobCard.tsx (not yet created)
 
-next: null
+next: Write JobCard.tsx (props: job: Job, render company/position/status/appliedDate) then JobList.tsx
 ```
 
 ---
@@ -35,7 +43,10 @@ next: null
 > Format: "What was demonstrated + how" — not just topic names.
 
 ```
-weekly_evidence: []
+weekly_evidence:
+  - Explained reconciliation render/commit split and why it's split that way (visual tearing) — K:3
+  - Explained index-as-key bug with a concrete stateful-list scenario without hints — K:4 level reasoning
+  - Wrote Job type independently, correct TS syntax, no hints needed
 ```
 
 ---
