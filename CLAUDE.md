@@ -12,6 +12,28 @@
 **Description:** Track your job applications from first apply to offer
 **Stack:** React · TypeScript · Vite · TanStack Query · Node.js · Express · PostgreSQL · Prisma · Docker
 
+---
+
+## Security
+
+- `save-exact=true` in all `.npmrc` — pin exact versions, no `^`
+- `"private": true` in all `package.json`
+- Prisma pinned to `6.12.0` — versions 6.13.0–7.x contain a vulnerability in `deepmerge-ts`
+  - CVE: https://github.com/advisories/GHSA-ggr8-5vv4-36mx
+  - **Do not upgrade Prisma until this CVE is resolved upstream**
+  - Before upgrading, run `npm audit` and verify 0 vulnerabilities
+
+## Node / npm
+
+- Node: v22.22.0 (pinned in `.nvmrc`)
+- npm: 10.9.4 — do not upgrade to 12.x (major version 11.x was skipped)
+
+## ESM
+
+- `"type": "module"` in all `package.json`
+- `tsconfig`: `module: NodeNext`, `moduleResolution: NodeNext`
+- All imports must include file extension: `import { x } from './file.js'`
+
 ```
 runway/
 ├── CLAUDE.md
