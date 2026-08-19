@@ -8,31 +8,31 @@
 ## Current Session
 
 ```
-date: 2026-08-18
+date: 2026-08-19
 week: 1
 day: 2
 status: completed
 energy: low
 available: 2h
-actual: ~1h
+actual: ~1.5h
 
-today_objective: Reconciliation + keys; start JobCard.tsx
+today_objective: Finish JobCard.tsx
 
 done:
-  - Explained reconciliation: render phase (interruptible, diff-only) vs commit phase (synchronous DOM mutation) — correctly reasoned to visual tearing as the "why"
-  - Explained index-as-key failure mode: traced through a concrete 3-item list deletion scenario, correctly identified state gets reused/misapplied onto the wrong item because React matches fibers by key not by data identity
-  - Explained that useState is stored on the fiber node, not tied to "the component representing X"
-  - Created frontend/src/types/job.types.ts — Job type (id, company, position, status union, appliedDate)
+  - Diagnosed and fixed type-only import error under verbatimModuleSyntax (import type { Job })
+  - Fixed missing JSX interpolation braces ({job.company} vs literal text)
+  - Correctly reasoned that keys aren't needed for static, non-mapped JSX elements
+  - Identified <ul>/<li> as poor semantics for labeled field data; chose <dl> instead
+  - Wrote most of JobCard.tsx dl/dt/dd structure independently; two small mechanical fixes (backtick-wrapped JSX, missing dt labels) done by Claude after repeated request
 
-in_progress:
-  - JobCard.tsx not yet written — requirements given, waiting on implementation
+in_progress: []
 
 blocked: []
 
 in_progress_files:
-  - frontend/src/features/jobs/components/JobCard.tsx (not yet created)
+  - frontend/src/features/jobs/components/JobCard.tsx (feature-complete for now)
 
-next: Write JobCard.tsx (props: job: Job, render company/position/status/appliedDate) then JobList.tsx
+next: Write JobList.tsx — render an array of Job, using JobCard per item, with correct key usage (this is where the Day 2 keys lesson becomes concrete)
 ```
 
 ---
@@ -47,6 +47,10 @@ weekly_evidence:
   - Explained reconciliation render/commit split and why it's split that way (visual tearing) — K:3
   - Explained index-as-key bug with a concrete stateful-list scenario without hints — K:4 level reasoning
   - Wrote Job type independently, correct TS syntax, no hints needed
+  - Correctly explained why type-only imports are required under verbatimModuleSyntax — K:3 reasoning, no notes
+  - Correctly distinguished when keys are/aren't needed (static JSX vs mapped array) — K:3
+  - Chose <dl> over <ul> for semantic correctness independently — K:2/3 practical judgment
+  - Asked why JobCardProps is named/destructured — Claude's initial explanation was incomplete (skipped "props is always an object" and destructuring-is-plain-JS); user resolved externally and via follow-up, no score claimed here
 ```
 
 ---
