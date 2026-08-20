@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { Job } from "../../../types/job.types";
 
 
@@ -10,6 +10,14 @@ type JobFilterProps = {
 export function JobFilter({ jobs, onFilteredJobsChange }: JobFilterProps) {
     const [text, setText] = useState('');
     const [status, setStatus] = useState<'all' | Job['status']>('all');
+
+    const filtered = jobs.filter(job => {
+        return (status === 'all' || job.status === status) && job.company.toLocaleLowerCase().includes(text.toLocaleLowerCase());
+    });
+
+    useEffect(() => {
+        onFilteredJobsChange(filtered);
+    }, [jobs, text, status]);
 
     return (
         <>

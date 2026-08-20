@@ -11,34 +11,27 @@
 date: 2026-08-20
 week: 1
 day: 3
-status: active
+status: completed
 energy: low
 available: 2h
-actual: ~1.5h
-
-today_objective: useState, batching, controlled inputs, state lifting — build JobFilter with search + status select
+actual: ~2h
 
 done:
-  - Explained state-as-snapshot: why console.log(count) after setCount sees the old value (closure over const, frozen per render)
-  - Explained batching: why multiple setState calls in one handler produce a single re-render, distinct from the snapshot mechanism
-  - Corrected Claude's own oversimplification: an uncontrolled-input "revert" is not a full component re-render, but React's internal DOM input-event sync
-  - Explained controlled input pattern (value + onChange) and why omitting onChange makes an input appear locked
-  - Explained TypeScript literal widening: why useState('all') infers string, not the literal 'all', and why explicit generic useState<'all' | Job['status']>(...) is needed
-  - Explained type assertion (as) vs real type safety, applied to e.target.value on a native <select>
-  - Wrote JobFilter.tsx: props wired to signature, controlled <input> (search) and <select> (status) with useState hooks
+  - Finished JobFilter.tsx: fixed type assertion for select, wrote filteredJobs filter logic (status + case-insensitive substring match on company), correctly moved parent notification into useEffect
+  - Independently found and fixed two bugs in the filter logic (&& binding tighter than ||, wrong comparison instead of .includes())
+  - Understood the useEffect dependency pitfall: why depending on a derived value (filtered — new array every render) causes an infinite loop; why depending on stable inputs (jobs, text, status) is correct
+  - Wired JobFilter into App.tsx: App owns filteredJobs, JobFilter always filters from the immutable mockJobs (not the already-narrowed list) — independently fixed both bugs (useState destructuring, jobs source)
+  - Verified functionality in browser (npm run dev) — search and status filter work correctly
+  - Walked through the useDebounce concept: why useEffect cleanup is needed, traced the timeline step by step (setTimeout + clearTimeout on each new effect) with a concrete example
 
 in_progress:
-  - JobFilter.tsx: setStatus(e.target.value) still needs the `as Job['status'] | 'all'` type assertion fix
-  - JobFilter.tsx: filteredJobs computation logic not yet written
-  - JobFilter.tsx: onFilteredJobsChange not yet called anywhere
-  - JobFilter not yet wired into App.tsx
+  - useDebounce.ts not yet written (concept covered only, signature drafted: function useDebounce<T>(value: T, delay: number): T)
 
 blocked: []
 
-in_progress_files:
-  - frontend/src/features/jobs/components/JobFilter.tsx
+in_progress_files: []
 
-next: Finish JobFilter.tsx — fix status type assertion, write filteredJobs filter logic, decide where/when to call onFilteredJobsChange, wire into App.tsx
+next: Write useDebounce.ts independently from the signature (Day 4), integrate it into JobFilter in place of the direct useEffect
 ```
 
 ---
@@ -61,6 +54,11 @@ weekly_evidence:
   - Self-diagnosed "array of undefined" bug from a missing return in an arrow function block body, without hints — P:3 level reasoning
   - Correctly identified JSX cannot contain statements (if) and relocated an if-check to the function body after a nudge about JS-vs-JSX zones — P:2/3
   - Independently reasoned about mock data location using Vite/TS module resolution constraints (src/ boundary) — K:2/3 practical judgment
+  - Independently fixed an operator precedence bug (&& / ||) in a filter predicate without code hints — P:3 level
+  - Independently fixed a wrong comparison (=== instead of .includes(), missing toLocaleLowerCase) — P:3 level
+  - Correctly identified an infinite-loop risk in a useEffect dependency array by asking a sharp follow-up question that caught an error in Claude's suggestion — K:3/4 level reasoning
+  - Independently fixed two bugs in App.tsx (destructuring useState as an object instead of an array; wrong jobs source for filtering) without direct code hints — P:3 level
+  - Traced useEffect cleanup mechanics step by step on a timeline (conceptual, no code written) — K:2/3 level
 ```
 
 ---
@@ -71,6 +69,10 @@ weekly_evidence:
 
 ```
 sessions:
+  - date: 2026-08-20
+    day: 3
+    status: completed
+    summary: Finished JobFilter.tsx (search + status filter, useEffect dependency fix) and wired into App.tsx; walked through useDebounce/cleanup concept
   - date: 2026-08-19
     day: 2
     status: completed
