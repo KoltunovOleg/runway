@@ -8,31 +8,37 @@
 ## Current Session
 
 ```
-date: 2026-08-19
+date: 2026-08-20
 week: 1
-day: 2
-status: completed
+day: 3
+status: active
 energy: low
-available: 1.5h
+available: 2h
 actual: ~1.5h
 
-today_objective: Write JobList.tsx, wire up mock data, render end-to-end
+today_objective: useState, batching, controlled inputs, state lifting — build JobFilter with search + status select
 
 done:
-  - Wrote JobList.tsx: maps Job[] to JobCard per item with job.id as key
-  - Debugged own mistakes independently after hints: invalid map callback (missing return), invalid prop syntax ({ ...destructure }: job) instead of job={job}, and placing an if-statement inside JSX instead of before the return
-  - Added empty-state handling (if jobs.length === 0 return fallback message)
-  - Made independent architecture call to put mock data in src/mocks/ instead of a root-level dir, correctly reasoning about Vite/TS resolution constraints
-  - Created src/mocks/jobs.mock.ts with 10 typed Job objects
-  - Wired JobList + mockJobs into App.tsx, verified rendering in browser (npm run dev)
+  - Explained state-as-snapshot: why console.log(count) after setCount sees the old value (closure over const, frozen per render)
+  - Explained batching: why multiple setState calls in one handler produce a single re-render, distinct from the snapshot mechanism
+  - Corrected Claude's own oversimplification: an uncontrolled-input "revert" is not a full component re-render, but React's internal DOM input-event sync
+  - Explained controlled input pattern (value + onChange) and why omitting onChange makes an input appear locked
+  - Explained TypeScript literal widening: why useState('all') infers string, not the literal 'all', and why explicit generic useState<'all' | Job['status']>(...) is needed
+  - Explained type assertion (as) vs real type safety, applied to e.target.value on a native <select>
+  - Wrote JobFilter.tsx: props wired to signature, controlled <input> (search) and <select> (status) with useState hooks
 
-in_progress: []
+in_progress:
+  - JobFilter.tsx: setStatus(e.target.value) still needs the `as Job['status'] | 'all'` type assertion fix
+  - JobFilter.tsx: filteredJobs computation logic not yet written
+  - JobFilter.tsx: onFilteredJobsChange not yet called anywhere
+  - JobFilter not yet wired into App.tsx
 
 blocked: []
 
-in_progress_files: []
+in_progress_files:
+  - frontend/src/features/jobs/components/JobFilter.tsx
 
-next: Day 3 — useState, batching, controlled inputs, state lifting. Build JobFilter with search + status select.
+next: Finish JobFilter.tsx — fix status type assertion, write filteredJobs filter logic, decide where/when to call onFilteredJobsChange, wire into App.tsx
 ```
 
 ---
@@ -64,7 +70,11 @@ weekly_evidence:
 > Last 5 sessions for context. Older sessions are removed.
 
 ```
-sessions: []
+sessions:
+  - date: 2026-08-19
+    day: 2
+    status: completed
+    summary: Wrote JobList.tsx + JobCard mock data wiring; reconciliation/keys evidence
 ```
 
 ---
