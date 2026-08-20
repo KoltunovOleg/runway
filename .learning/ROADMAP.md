@@ -1,8 +1,12 @@
 # ROADMAP.md — Runway Learning Plan
 
 > Strategic 6-week plan. Do not modify without explicit confirmation.
-> Last confirmed: 2026-08-17
+> Last confirmed: 2026-08-20
 > Target: Middle Full-Stack JavaScript/TypeScript Developer
+
+## Changelog
+
+- **2026-08-20** — Added enterprise-standard practices requested by user for interview readiness against big international companies: OpenAPI/Swagger contract for Jobs API (Week 3 Day 19), request logging + correlation IDs (Week 4 Day 27), and CI/CD via GitHub Actions lint+test+build gate marked optional/stretch (Week 6 Day 37, deprioritized per user — not core to the 6-week goal).
 
 ---
 
@@ -109,7 +113,7 @@
 | 16 | Express · routing · middleware chain · controller→service pattern | App structure, `app.ts`, `server.ts`, graceful shutdown |
 | 17 | Prisma schema · migrations · relations · seed | `schema.prisma` (User, Job, Interview, RefreshToken), first migration |
 | 18 | PostgreSQL · SELECT/INSERT/UPDATE/DELETE · JOIN · GROUP BY · indexes | Raw SQL practice, EXPLAIN, understand what Prisma generates |
-| 19 | REST API design · HTTP status codes · Zod validation · error handler | Jobs CRUD API (without auth), centralized error middleware |
+| 19 | REST API design · HTTP status codes · Zod validation · error handler · OpenAPI contracts | Jobs CRUD API (without auth), centralized error middleware, OpenAPI/Swagger spec (`openapi.yaml` or `zod-to-openapi`) for jobs endpoints |
 | 20 | Pagination · filtering · sorting · search on backend | `GET /api/jobs?page=1&limit=10&status=applied&search=google` |
 | 21 | **Weekly review** · random knowledge check · API testing with REST client | All endpoints tested, schema documented |
 
@@ -119,6 +123,7 @@
 - [ ] `POST /api/jobs` with invalid body → 422 with field details
 - [ ] All 404 and 500 errors have the same format
 - [ ] Schema documented in `prisma/schema.prisma` with comments
+- [ ] OpenAPI/Swagger spec covers all Jobs CRUD endpoints, viewable via Swagger UI
 - [ ] Explain middleware chain execution order
 - [ ] Write a controller → service without a template
 
@@ -151,6 +156,7 @@ EXPLAIN ANALYZE SELECT ...;
 - What are indexes and when should you add them?
 - What is the N+1 problem?
 - What is a database transaction and when is it needed?
+- Why document an API with OpenAPI/Swagger instead of just README examples?
 
 ---
 
@@ -168,7 +174,7 @@ EXPLAIN ANALYZE SELECT ...;
 | 24 | Auth middleware chain · extractToken → verifyToken → attachUser | `auth.middleware.ts`, protect all routes |
 | 25 | Row-level security · CORS · rate limiting | Jobs/Interviews: `WHERE user_id = req.user.id` on every query |
 | 26 | Connect frontend to real backend · remove mock server | Replace mock API with real endpoints, fix CORS |
-| 27 | E2E flow testing · error handling audit · logging | Full flow: register → login → CRUD → logout → login → data persists |
+| 27 | E2E flow testing · error handling audit · structured logging · request correlation IDs | Full flow: register → login → CRUD → logout → login → data persists; request logging middleware with correlation/request ID per request |
 | 28 | **Weekly review** · random knowledge check · security audit | 401 auto-redirect, refresh rotation verified |
 
 ### Auth Middleware Chain
@@ -188,6 +194,7 @@ Request
 - [ ] Another user cannot see someone else's jobs
 - [ ] Refresh token rotation works (new refresh token on every refresh)
 - [ ] Frontend: 401 → automatic redirect to `/login`
+- [ ] Every request log line includes a correlation/request ID traceable across the request lifecycle
 - [ ] Explain sessions vs JWT trade-offs
 - [ ] Explain why HttpOnly cookie, not localStorage
 
@@ -200,6 +207,7 @@ Request
 - What is CORS and why is it needed?
 - How does the auth middleware chain work?
 - Where do you store access tokens on the client?
+- Why do you need a correlation/request ID, and how would you trace a request across logs?
 
 ---
 
@@ -266,6 +274,7 @@ type Awaited<T> = T extends Promise<infer U> ? U : T;
 |-----|-------|--------------|
 | 36 | Docker basics · Dockerfile · multi-stage build | `frontend/Dockerfile` (build → nginx), `backend/Dockerfile` |
 | 37 | Docker Compose · networking · volumes · env vars | `docker-compose.yml` (all services), `docker-compose.prod.yml` |
+| 37 (optional/stretch) | CI/CD basics · GitHub Actions | GitHub Actions workflow: lint + test + build gate on PR — not priority, do only if ahead of schedule |
 | 38 | Linux basics · SSH · VPS setup · deploy | Provision VPS, SSH in, clone repo, run docker compose |
 | 39 | Nginx · reverse proxy · static files · SSL · Certbot | `nginx.conf`, HTTPS live |
 | 40 | System design: load balancer · cache · queue · CDN · scaling · bottlenecks | Architecture diagram, explain Runway's bottlenecks |
@@ -314,6 +323,7 @@ Runway bottlenecks:
 - [ ] Can explain every technical decision in the project
 - [ ] README: setup, architecture, API docs, deployment
 - [ ] Ready to answer any question about the project
+- [ ] (optional/stretch) GitHub Actions workflow blocks PR merge on lint/test/build failure
 
 ### Interview Questions (Week 6)
 
@@ -324,6 +334,7 @@ Runway bottlenecks:
 - How would you scale Runway to 100k users?
 - What is a CDN and when would you add one?
 - What is horizontal scaling and what does it require?
+- (optional) Walk me through what happens in your CI pipeline when you open a PR.
 
 ---
 
