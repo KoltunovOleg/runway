@@ -10,23 +10,27 @@
 ```
 date: 2026-08-21
 week: 1
-day: 4
-status: completed
-energy: low
-available: -
-actual: -
+day: 5
+status: abandoned
+energy: medium
+available: 1h
+actual: ~1h
 
 done:
-  - Applied useDebounce in JobFilter.tsx independently: added debouncedText, switched filter logic and useEffect dependency to debouncedText, kept input bound to live text
-  - Correctly explained why only 1 call to onFilteredJobsChange fires during rapid typing (timer reset via cleanup on every keystroke, only last timer survives)
+  - Explained useMemo theory: referential equality, dependency comparison, cost/benefit trade-off
+  - Explained React.memo theory: shallow prop comparison via Object.is, why reference-type props (objects/arrays/functions) defeat it without memoization
+  - Correctly reasoned that React.memo comparison is by reference not value for non-primitives — K:3
+  - Correctly identified that .filter() creates a new array but does not recreate the individual job objects inside it (reference preserved) — K:3 reasoning
+  - Correctly identified that job.id (and thus key) stays stable across re-filters when the same job object survives — K:2/3
 
-in_progress: []
+in_progress:
+  - Unresolved misconception: React.memo vs "do unfiltered/removed items live in memory" — needs to be resolved before writing code (useMemo/React.memo implementation not yet started this session)
 
 blocked: []
 
 in_progress_files: []
 
-next: Custom review of useDebounce in a new context after 10 more learning sessions (not calendar days), per user request — outside normal spaced-repetition interval
+next: Resolve the React.memo/memory misconception (filteredJobs only contains rendered items, JobCard instances for non-matching jobs simply don't exist in the tree), then implement useMemo(filteredJobs) + React.memo(JobCard) with hints only if needed
 ```
 
 ---
@@ -56,6 +60,10 @@ weekly_evidence:
   - Traced useEffect cleanup mechanics step by step on a timeline (conceptual, no code written) — K:2/3 level
   - Independently integrated useDebounce into JobFilter.tsx (debouncedText, updated filter + useEffect deps) — P:3
   - Correctly traced debounce timer-reset mechanics for rapid input without hints — K:3/4 reasoning
+  - Correctly explained React.memo's shallow comparison (Object.is per prop) without hints — K:3
+  - Correctly reasoned that .filter() preserves object references for surviving items — K:3
+  - Correctly reasoned that stable job.id implies stable key across re-filters — K:2/3
+  - Misconception surfaced mid-reasoning re: React.memo and array size/memory — flagged, not yet resolved
 ```
 
 ---
@@ -66,6 +74,10 @@ weekly_evidence:
 
 ```
 sessions:
+  - date: 2026-08-21
+    day: 5
+    status: abandoned
+    summary: Theory session on useMemo/React.memo (referential equality, shallow comparison); no code written; React.memo/memory misconception flagged for next session
   - date: 2026-08-21
     day: 4
     status: completed
