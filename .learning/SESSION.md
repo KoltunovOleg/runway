@@ -8,30 +8,25 @@
 ## Current Session
 
 ```
-date: 2026-08-20
+date: 2026-08-21
 week: 1
-day: 3
+day: 4
 status: completed
 energy: low
-available: 2h
-actual: ~2h
+available: -
+actual: -
 
 done:
-  - Finished JobFilter.tsx: fixed type assertion for select, wrote filteredJobs filter logic (status + case-insensitive substring match on company), correctly moved parent notification into useEffect
-  - Independently found and fixed two bugs in the filter logic (&& binding tighter than ||, wrong comparison instead of .includes())
-  - Understood the useEffect dependency pitfall: why depending on a derived value (filtered — new array every render) causes an infinite loop; why depending on stable inputs (jobs, text, status) is correct
-  - Wired JobFilter into App.tsx: App owns filteredJobs, JobFilter always filters from the immutable mockJobs (not the already-narrowed list) — independently fixed both bugs (useState destructuring, jobs source)
-  - Verified functionality in browser (npm run dev) — search and status filter work correctly
-  - Walked through the useDebounce concept: why useEffect cleanup is needed, traced the timeline step by step (setTimeout + clearTimeout on each new effect) with a concrete example
+  - Applied useDebounce in JobFilter.tsx independently: added debouncedText, switched filter logic and useEffect dependency to debouncedText, kept input bound to live text
+  - Correctly explained why only 1 call to onFilteredJobsChange fires during rapid typing (timer reset via cleanup on every keystroke, only last timer survives)
 
-in_progress:
-  - useDebounce.ts not yet written (concept covered only, signature drafted: function useDebounce<T>(value: T, delay: number): T)
+in_progress: []
 
 blocked: []
 
 in_progress_files: []
 
-next: Write useDebounce.ts independently from the signature (Day 4), integrate it into JobFilter in place of the direct useEffect
+next: Custom review of useDebounce in a new context after 10 more learning sessions (not calendar days), per user request — outside normal spaced-repetition interval
 ```
 
 ---
@@ -59,6 +54,8 @@ weekly_evidence:
   - Correctly identified an infinite-loop risk in a useEffect dependency array by asking a sharp follow-up question that caught an error in Claude's suggestion — K:3/4 level reasoning
   - Independently fixed two bugs in App.tsx (destructuring useState as an object instead of an array; wrong jobs source for filtering) without direct code hints — P:3 level
   - Traced useEffect cleanup mechanics step by step on a timeline (conceptual, no code written) — K:2/3 level
+  - Independently integrated useDebounce into JobFilter.tsx (debouncedText, updated filter + useEffect deps) — P:3
+  - Correctly traced debounce timer-reset mechanics for rapid input without hints — K:3/4 reasoning
 ```
 
 ---
@@ -69,6 +66,10 @@ weekly_evidence:
 
 ```
 sessions:
+  - date: 2026-08-21
+    day: 4
+    status: completed
+    summary: Applied useDebounce in JobFilter.tsx (debouncedText wired into filter + useEffect deps)
   - date: 2026-08-20
     day: 3
     status: completed

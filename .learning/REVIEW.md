@@ -33,8 +33,9 @@
 
 ---
 
-## Upcoming (1)
+## Upcoming (2)
 - React Reconciliation + Rendering Model    K:4 P:0    due: +7d (2026-08-25)
+- useDebounce (custom hook)    K:3 P:3    due: +10 sessions   [custom interval, requested by user, counted in sessions not calendar days]
 
 
 
