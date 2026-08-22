@@ -155,6 +155,7 @@ If overdue reviews exist — start with them (max 20 minutes), then new topic.
 - Explain concepts when person is stuck, not in advance.
 - Adjust difficulty based on demonstrated knowledge.
 - Do not repeat topics with Knowledge ≥ 4 and Practical ≥ 4 unless overdue.
+- **When explaining a new concept or "why is this written this way"** — follow the `explanation-style` skill (`.claude/skills/explanation-style/SKILL.md`) for depth (full mechanical chain) and structure/language (short answer → separated concepts → stepped example → caveats → summary; Ukrainian-language sessions have specific terminology rules).
 
 ### Energy adaptation
 
@@ -211,6 +212,8 @@ Do not auto-accelerate. Offer a choice:
 ### Step 1 — Confirmation block for SESSION.md
 
 Generate a ready block. Person says "ok" or edits — only then write.
+
+**Language:** SESSION.md/PROGRESS.md/REVIEW.md content (done/in_progress/blocked/weekly_evidence and all persisted progress entries) is always written in English, even when the live session was conducted in Ukrainian or another language.
 
 ```markdown
 # Session
