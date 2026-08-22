@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { Job } from "../../../types/job.types";
 import { useDebounce } from "../../../shared/hooks/useDebounce";
 
@@ -13,13 +13,15 @@ export function JobFilter({ jobs, onFilteredJobsChange }: JobFilterProps) {
     const [status, setStatus] = useState<'all' | Job['status']>('all');
     const debouncedText = useDebounce(text, 500);
 
-    const filtered = jobs.filter(job => {
-        return (status === 'all' || job.status === status) && job.company.toLocaleLowerCase().includes(debouncedText.toLocaleLowerCase());
-    });
+    const filteredJobs = useMemo(() => {
+        return jobs.filter(job => {
+            return (status === 'all' || job.status === status) && job.company.toLocaleLowerCase().includes(debouncedText.toLocaleLowerCase());
+        });
+    }, [jobs, debouncedText, status]);
 
     useEffect(() => {
-        onFilteredJobsChange(filtered);
-    }, [jobs, debouncedText, status]);
+        onFilteredJobsChange(filteredJobs);
+    }, [jobs, debouncedText, status, onFilteredJobsChange, filteredJobs]);
 
     return (
         <>

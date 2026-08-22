@@ -1,10 +1,11 @@
+import React from "react";
 import type { Job } from "../../../types/job.types";
 
 type JobCardProps = {
     job: Job;
 };
 
-export function JobCard({ job }: JobCardProps) {
+export const JobCard = React.memo(function JobCard({ job }: JobCardProps) {
 
     return (
         <dl>
@@ -17,5 +18,5 @@ export function JobCard({ job }: JobCardProps) {
             <dt>Applied Date</dt>
             <dd>{job.appliedDate}</dd>
         </dl>
-        );
-}
+    );
+});
