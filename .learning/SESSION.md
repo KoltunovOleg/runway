@@ -8,29 +8,39 @@
 ## Current Session
 
 ```
-date: 2026-08-21
+date: 2026-08-22
 week: 1
 day: 5
-status: abandoned
+status: completed
 energy: medium
-available: 1h
-actual: ~1h
+available: 2h
+actual: ~2h
 
 done:
-  - Explained useMemo theory: referential equality, dependency comparison, cost/benefit trade-off
-  - Explained React.memo theory: shallow prop comparison via Object.is, why reference-type props (objects/arrays/functions) defeat it without memoization
-  - Correctly reasoned that React.memo comparison is by reference not value for non-primitives — K:3
-  - Correctly identified that .filter() creates a new array but does not recreate the individual job objects inside it (reference preserved) — K:3 reasoning
-  - Correctly identified that job.id (and thus key) stays stable across re-filters when the same job object survives — K:2/3
+  - Resolved React.memo/array-identity misconception through guided step-by-step reasoning (unmount vs hidden component; new array ≠ new objects inside it) — required substantial scaffolding, not independent (~K:2 for final restated conclusion, not K:3/4)
+  - Verified existing implementation: useMemo(filteredJobs) in JobFilter.tsx (correct deps: jobs, debouncedText, status) and React.memo(JobCard) — already written prior to this session
+  - Corrected own reasoning about useEffect deps ([jobs, debouncedText, status] vs filteredJobs) after a nudge — settled that useMemo's role is avoiding recomputation, not effect correctness
+  - Explained trade-off for useMemo: named when NOT to use it (small list, cheap filter — current JobFilter case) AND when it IS justified (large list, expensive computation) — K:4, both conditions given independently
+  - Used React DevTools Profiler: correctly correlated debounce timing with commit timeline; read flamegraph showing JobCard (Memo) as skipped (gray/hatched) vs App/JobFilter/JobList as rendered — interpretation required guidance, self-identified need for more independent practice
+  - Answered useCallback reference-stability question for onFilteredJobsChange: correctly reasoned it's stable because it's a useState setter (React guarantee), not a general "component functions are stable" claim — corrected after prompting
+  - Correctly reasoned that an inline arrow-function wrapper would NOT be stable across renders (new function object each render) — independent, no hints
+  - Identified that JobFilter's useEffect was missing onFilteredJobsChange (and filteredJobs) in its dependency array — a real exhaustive-deps violation — and fixed it independently once concept was explained
+  - Explained why exhaustive-deps lint rule requires the dep regardless of the specific caller's stability guarantee (component-local reasoning, not caller-aware) — K:3 after explanation
+  - Correctly concluded useCallback is NOT needed in current code (setFilteredJobs already stable) — K:3/4 "when NOT to use it"
+  - Independently reasoned through the necessary condition for useCallback to matter (inline function passed) then, after a nudge, added the sufficient condition (instability must be read by a dep array or React.memo prop comparison to matter) — K:3/4, second half required scaffolding
+  - Flagged useCallback as a topic needing repeated exposure in future examples — good self-awareness of shaky footing
 
 in_progress:
-  - Unresolved misconception: React.memo vs "do unfiltered/removed items live in memory" — needs to be resolved before writing code (useMemo/React.memo implementation not yet started this session)
+  - React DevTools Profiler: still needs independent practice reading "why did this render" and flamegraphs without step-by-step guidance (carried over, not attempted today)
+  - useCallback: conceptually sound but self-identified as needing reinforcement in future real examples — do not treat as settled
 
 blocked: []
 
-in_progress_files: []
+in_progress_files:
+  - frontend/src/features/jobs/components/JobFilter.tsx (useMemo + fixed useEffect deps, uncommitted)
+  - frontend/src/features/jobs/components/JobCard.tsx (React.memo, uncommitted)
 
-next: Resolve the React.memo/memory misconception (filteredJobs only contains rendered items, JobCard instances for non-matching jobs simply don't exist in the tree), then implement useMemo(filteredJobs) + React.memo(JobCard) with hints only if needed
+next: Get independent Profiler practice reading "why did this render"; revisit useCallback in a future real scenario (not yet at K:4 independent — flagged by user for repetition) before Week 1 review (Day 7)
 ```
 
 ---
@@ -64,6 +74,17 @@ weekly_evidence:
   - Correctly reasoned that .filter() preserves object references for surviving items — K:3
   - Correctly reasoned that stable job.id implies stable key across re-filters — K:2/3
   - Misconception surfaced mid-reasoning re: React.memo and array size/memory — flagged, not yet resolved
+  - Verified/reviewed already-implemented useMemo(filteredJobs) + React.memo(JobCard) in JobFilter.tsx/JobCard.tsx, explained correct deps reasoning after correction — P:3/4
+  - Named useMemo trade-off both directions (when NOT to use + when justified) independently — K:4
+  - Read React DevTools Profiler flamegraph correctly with guidance (Memo skip visualization) — practical exposure, not yet independent
+  - Self-corrected an inflated score claim from Claude (see feedback note) — good calibration instinct
+  - Correctly reasoned that useState setters (not general component functions) have a React-guaranteed stable reference — K:3, corrected after prompting
+  - Correctly reasoned that an inline arrow-function prop is a new reference every render — K:3/4 independent
+  - Identified and fixed a real missing-dependency bug (onFilteredJobsChange, filteredJobs) in JobFilter's useEffect independently — P:3
+  - Explained exhaustive-deps lint rationale (component can't assume caller-side stability) — K:3
+  - Named when useCallback is NOT needed (current code) with correct reasoning — K:3/4
+  - Partially reasoned useCallback's sufficient condition (instability must be read by deps/memo) independently, completed with a nudge — K:3, not yet K:4 for this specific point
+  - Self-flagged useCallback as needing more repetition — good calibration
 ```
 
 ---
@@ -74,9 +95,13 @@ weekly_evidence:
 
 ```
 sessions:
+  - date: 2026-08-22
+    day: 5
+    status: completed
+    summary: Resolved React.memo/array-identity misconception, reviewed existing useMemo+React.memo implementation, verified trade-offs with Profiler, covered useCallback (reference stability, when needed), fixed real exhaustive-deps bug in JobFilter
   - date: 2026-08-21
     day: 5
-    status: abandoned
+    status: completed
     summary: Theory session on useMemo/React.memo (referential equality, shallow comparison); no code written; React.memo/memory misconception flagged for next session
   - date: 2026-08-21
     day: 4
